@@ -1,3 +1,5 @@
 build/
 CMakeLists.txt
 Generate.bat
+Engine/Python/Lib/__pycache__
+Engine/Python/Lib/encodings/__pycache__
