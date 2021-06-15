@@ -1,4 +1,5 @@
 import os
+import sys
 
 class SetupINI :
     CMakeVer = 0 
