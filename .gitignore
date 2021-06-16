@@ -1,5 +1,11 @@
-build/
-CMakeLists.txt
-Generate.bat
-Engine/Python/Lib/__pycache__
-Engine/Python/Lib/encodings/__pycache__
+.vs
+*.sln
+premake5.lua
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+GenerateProjectFiles.bat
+Engine/obj
+Engine/Extras/ThirdParty/Python/Lib/__pycache__
+Engine/Extras/ThirdParty/Python/Lib/encodings/__pycache__
+Engine/Extras/ThirdParty/Python/Lib/Anreal/__pycache__
