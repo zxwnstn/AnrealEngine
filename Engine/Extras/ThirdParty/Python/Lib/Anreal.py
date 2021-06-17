@@ -2,7 +2,6 @@ import os
 
 def GetAnrealRootDir() :
     Ret = os.getcwd()
-    print("GetAnrealRootDir****" + Ret)
     strList = Ret.split('\\')
     Rootindex = len(strList) - 4
     index = 0
