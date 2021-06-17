@@ -2,20 +2,20 @@ import os
 
 def GetAnrealRootDir() :
     Ret = os.getcwd()
-    strList = Ret.split('\\')
-    Rootindex = len(strList) - 4
-    index = 0
-    rootPath = ""
+    StrList = Ret.split('\\')
+    Rootindex = len(StrList) - 4
+    Index = 0
+    RootPath = ""
     
-    for i in strList:
-        if index == Rootindex:
+    for i in StrList:
+        if Index == Rootindex:
             break
-        slash = "/"
-        if index == Rootindex- 1:
-            slash = ""
-        rootPath += i + slash
-        index = index + 1
+        Slash = "/"
+        if Index == Rootindex- 1:
+            Slash = ""
+        RootPath += i + Slash
+        Index = Index + 1
 
-    Ret = rootPath
+    Ret = RootPath
     print(Ret)
     return Ret
