@@ -1,18 +1,9 @@
 import os
 import sys
-
-def GetAnrealRootDir() :
-    Ret = os.getcwd()
-    Index = Ret.find("AnrealEngine")
-    if Index == -1 :
-        print("The AnrealEngine paths not founded please check your path or version") 
-        exit()
-    Ret = Ret[0 : Index + 13]
-    print(Ret)
-    return Ret
+import Anreal
 
 #global
-RootDir = GetAnrealRootDir()
+RootDir = Anreal.GetAnrealRootDir()
 AnrealPythonLibDir = "/Engine/Extras/ThirdParty/Python/Lib/Anreal"
 sys.path.append(RootDir + AnrealPythonLibDir)
 from AnrealUtil import INIReader

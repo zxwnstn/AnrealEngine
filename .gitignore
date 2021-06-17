@@ -9,3 +9,6 @@ Engine/obj
 Engine/Extras/ThirdParty/Python/Lib/__pycache__
 Engine/Extras/ThirdParty/Python/Lib/encodings/__pycache__
 Engine/Extras/ThirdParty/Python/Lib/Anreal/__pycache__
+build
+CMakeLists.txt
+Generate.bat
