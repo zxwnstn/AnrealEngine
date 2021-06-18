@@ -44,6 +44,7 @@ workspace "Anreal"
         "ShippingEditor",
 		"ShippingGame"
 	}
+    location ("build")
 	platforms
 	{
 	    "x64"
@@ -55,7 +56,7 @@ workspace "Anreal"
 	
     group "Engine"
         project "Engine"
-	    location "Engine"
+	    location "build/Engine"
 	    kind "Makefile"
 	    language "C++"
 
