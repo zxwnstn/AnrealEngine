@@ -17,5 +17,18 @@ def GetAnrealRootDir() :
         Index = Index + 1
 
     Ret = RootPath
-    print(Ret)
     return Ret
+
+class BuildDesc :
+    ModuleName = ""
+    DependencyList = {}
+    def __init__(self) :
+        self.SetDependency()
+        self.SetOther()
+    
+    def SetDependency(self) :
+        pass
+    
+    def SetOther(self) :
+        pass
+    

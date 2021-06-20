@@ -61,17 +61,17 @@ workspace "Anreal"
 
         buildcommands 
         {
-            "Scripts/Build.bat"
+            "../../Engine/Scripts/Build.bat"
         }
 
         rebuildcommands 
         {
-            "Scripts/Clean.bat"
+            "../../Engine/Scripts/Rebuild.bat"
         }
         
         cleancommands 
         {
-            "Scripts/Rebuild.bat"
+            "../../Engine/Scripts/Clean.bat"
         }
 
 	    files

@@ -1,5 +1,4 @@
-echo "hello Build.bat"
-cd Extras\ThirdParty\Python
+cd ..\..\Engine\Extras\ThirdParty\Python
 set PYTHONHOME=%cd%
 set PYTHONPATH=%cd%\Lib
-python.exe ../../../Scripts/Build.py
+python.exe Lib\Anreal\AnrealBuild.py -Build
