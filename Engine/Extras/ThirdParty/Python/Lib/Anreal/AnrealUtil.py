@@ -55,7 +55,7 @@ workspace "Anreal"
 	
     group "Engine"
         project "Engine"
-	    location "ProjectFiles/Engine"
+	    location "Projects/Engine"
 	    kind "Makefile"
 	    language "C++"
 
