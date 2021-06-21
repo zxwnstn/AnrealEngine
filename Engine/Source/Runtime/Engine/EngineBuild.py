@@ -2,7 +2,8 @@ import Anreal
 
 class EngineBuildDesc(Anreal.BuildDesc) :
     def SetDependency(self) :
-        print("EngineBuild SetDependency")
+        self.DependencyList.append("Core")
+        self.DependencyList.append("Renderer")
 
     def SetOther(self) :
         self.ModuleName = "Engine"

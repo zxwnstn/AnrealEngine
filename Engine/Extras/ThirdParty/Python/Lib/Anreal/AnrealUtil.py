@@ -61,12 +61,12 @@ workspace "Anreal"
 
         buildcommands 
         {
-            "../../Engine/Scripts/Build.bat"
+            "../../Engine/Scripts/Build.bat -$(Configuration)"
         }
 
         rebuildcommands 
         {
-            "../../Engine/Scripts/Rebuild.bat"
+            "../../Engine/Scripts/Rebuild.bat" -$(Configuration)
         }
         
         cleancommands 

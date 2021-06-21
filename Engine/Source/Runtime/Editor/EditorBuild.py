@@ -2,7 +2,9 @@ import Anreal
 
 class EditorBuildDesc(Anreal.BuildDesc) :
     def SetDependency(self) :
-        print("EditorBuild SetDependency")
+        self.DependencyList.append("Core")
+        self.DependencyList.append("Engine")
+        self.DependencyList.append("Renderer")
 
     def SetOther(self) :
         self.ModuleName = "Editor"

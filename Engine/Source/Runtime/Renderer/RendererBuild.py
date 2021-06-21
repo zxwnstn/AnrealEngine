@@ -2,7 +2,8 @@ import Anreal
 
 class RendererBuildDesc(Anreal.BuildDesc) :
     def SetDependency(self) :
-        print("RendererBuild SetDependency")
+        self.DependencyList.append("Core")
+        self.DependencyList.append("RHI")
 
     def SetOther(self) :
         self.ModuleName = "Renderer"

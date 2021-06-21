@@ -2,7 +2,8 @@ import Anreal
 
 class D3D12RHIBuildDesc(Anreal.BuildDesc) :
     def SetDependency(self) :
-        print("D3D12RHIBuild SetDependency")
+        self.DependencyList.append("Core")
+        self.DependencyList.append("RHI")
 
     def SetOther(self) :
         self.ModuleName = "D3D12RHI"

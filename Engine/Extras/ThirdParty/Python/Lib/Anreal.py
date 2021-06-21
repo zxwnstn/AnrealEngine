@@ -20,9 +20,9 @@ def GetAnrealRootDir() :
     return Ret
 
 class BuildDesc :
-    ModuleName = ""
-    DependencyList = {}
     def __init__(self) :
+        self.ModuleName = ""
+        self.DependencyList = []
         self.SetDependency()
         self.SetOther()
     
