@@ -9,7 +9,7 @@ CLDir = "C:/\"Program Files (x86)\"/\"Microsoft Visual Studio\"/2019/Community/V
 def PromptBuildModule(args, description) :
     print("Module : {0}".format(description.ModuleName))
     CLCommandLine = CLDir + "/cl.exe"
-    os.system(CLCommandLine)
+    # os.system(CLCommandLine)
 
 def FindAsName(moduleName, buildDesc) :
     for Description in buildDesc :
@@ -55,6 +55,8 @@ def RunBuild(args) :
     SourceDir = RootDir + '/' + "Engine/Source" 
     ProgramCategories = os.listdir(SourceDir)
     for Program in ProgramCategories :
+        if Program == "Program" : 
+            continue
         PromptBuildProgram(args, Program)
 
 def RunClean() :

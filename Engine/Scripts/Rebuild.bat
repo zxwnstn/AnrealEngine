@@ -1,4 +1,4 @@
 cd ..\..\Engine\Extras\ThirdParty\Python
 set PYTHONHOME=%cd%
 set PYTHONPATH=%cd%\Lib
-python.exe Lib\Anreal\AnrealBuild.py -Rebuild
+python.exe ..\..\..\Source\Program\AnrealBuildTool\AnrealBuild.py -Rebuild
