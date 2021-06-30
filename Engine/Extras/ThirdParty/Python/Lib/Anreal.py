@@ -93,12 +93,12 @@ workspace "Anreal"
 
         buildcommands 
         {
-            "../../Engine/Scripts/Build.bat -$(Configuration)"
+            "../../Engine/Scripts/Build.bat -$(Configuration) -$(VC_IncludePath) -$(WindowsSDK_IncludePath) -$(VC_LibraryPath_x64) -$(WindowsSDK_LibraryPath_x64)"
         }
 
         rebuildcommands 
         {
-            "../../Engine/Scripts/Rebuild.bat -$(Configuration)"
+            "../../Engine/Scripts/Rebuild.bat -$(Configuration) -$(VC_IncludePath) -$(WindowsSDK_IncludePath) -$(VC_LibraryPath_x64) -$(WindowsSDK_LibraryPath_x64)"
         }
         
         cleancommands 

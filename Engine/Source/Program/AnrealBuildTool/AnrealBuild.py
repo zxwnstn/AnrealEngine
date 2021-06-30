@@ -4,12 +4,20 @@ import Anreal
 
 RootDir = Anreal.GetAnrealRootDir()
 RootOutputDir = RootDir + "/Engine/Binaries/"
-CLDir = "C:/\"Program Files (x86)\"/\"Microsoft Visual Studio\"/2019/Community/VC/Tools/MSVC/14.28.29910/bin/Hostx64/x64"
+
+def ParseAndGetClCmdLine(config, includePath, description) :
+    return ""
+
+def ParseAndGetLinkCmdLine(config, libPath, description) :
+    return ""
 
 def PromptBuildModule(args, description) :
     print("Module : {0}".format(description.ModuleName))
-    CLCommandLine = CLDir + "/cl.exe"
-    # os.system(CLCommandLine)
+    CLCommandLine = ParseAndGetClCmdLine(args["Config"], args["IncludePaths"], description)
+    #os.system(CLCommandLine)
+
+    LinkCommandLine = ParseAndGetLinkCmdLine(args["Config"], args["LibPaths"], description)
+    #os.system(LinkCommandLine)
 
 def FindAsName(moduleName, buildDesc) :
     for Description in buildDesc :
@@ -71,16 +79,50 @@ class BuildCmdList :
         self.Args = {}
         self.IsBuild = False
         self.IsRebuild = False
-        i = 0
+
+        MergedCmd = ""
+        FirstSplitedCmd = []
         for cmd in sys.argv :
-            if i == 1 :
-                if cmd == "-Build" :
-                    self.IsBuild = True
-                elif cmd == "-Rebuild" :
-                    self.isRebuild = True
-            if i == 2 :
-                self.Args["Configs"] = cmd
-            i += 1
+            MergedCmd += cmd
+        FirstSplitedCmd = MergedCmd.split('-')
+
+        # naive cmd legend (indicate FirstSplitedCmd)
+        # 0 - Exec argument
+        # 1 - BuildType
+        # 2 - Config
+        # 3, 4 - Basic Include path
+        # 5, 6 - Basic Lib path 
+
+        # First - Set build type and erase elm unnecessaries
+        BuildType = FirstSplitedCmd[1]
+        if BuildType == "Build" :
+            self.IsBuild = True
+        elif BuildType == "ReBuild" :
+            self.IsRebuild = True
+        # Second - Set Config flag
+        self.Args["Config"] = FirstSplitedCmd[2]
+
+        # Third - Fill include path with exactly tokkenized paths FirstSplitedCmd[3], FirstSplitedCmd[4]
+        IncludePathList = []
+        FullIncludePath = FirstSplitedCmd[3] + FirstSplitedCmd[4]
+        TokkenizedIncludePaths = FullIncludePath.split(';')
+        for path in TokkenizedIncludePaths :
+            path.strip()
+            if path != "" :
+                IncludePathList.append(path)
+                # print(path)
+        self.Args["IncludePaths"] = IncludePathList
+
+        # Forth - Fill lib path with exactly tokkenized paths FirstSplitedCmd[5], FirstSplitedCmd[6]
+        LibPathList = []
+        FullLibPath = FirstSplitedCmd[5] + FirstSplitedCmd[6]
+        TokkenizedIncludePaths = FullLibPath.split(';')
+        for path in TokkenizedIncludePaths :
+            path.strip()
+            if path != "" :
+                LibPathList.append(path)
+                # print(path)
+        self.Args["LibPaths"] = LibPathList
 
     def exec(self) :
         if self.IsBuild == True :
@@ -92,7 +134,7 @@ class BuildCmdList :
 
 def main() :
     os.chdir(RootDir)
-    print("AnrealBuild!")
+    print("AnrealBuildTool")
     CmdList = BuildCmdList()
     CmdList.exec()
 
