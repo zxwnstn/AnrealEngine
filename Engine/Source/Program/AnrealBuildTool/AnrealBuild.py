@@ -1,6 +1,7 @@
 import os
 import sys
 import Anreal
+import json
 
 RootDir = Anreal.GetAnrealRootDir()
 RootOutputDir = RootDir + "/Engine/Binaries/"
