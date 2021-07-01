@@ -22,6 +22,8 @@ def GetAnrealRootDir() :
 class BuildDesc :
     def __init__(self) :
         self.ModuleName = ""
+        self.ModulePath = ""
+        self.ProgramPath = ""
         self.DependencyList = []
         self.SetDependency()
         self.SetOther()
@@ -93,12 +95,12 @@ workspace "Anreal"
 
         buildcommands 
         {
-            "../../Engine/Scripts/Build.bat -$(Configuration) -$(VC_IncludePath) -$(WindowsSDK_IncludePath) -$(VC_LibraryPath_x64) -$(WindowsSDK_LibraryPath_x64)"
+            "../../Engine/Scripts/Build.bat -$(Configuration) -$(VC_IncludePath) -$(WindowsSDK_IncludePath) -$(VC_LibraryPath_x64) -$(WindowsSDK_LibraryPath_x64) -$(VC_PGO_RunTime_Dir)"
         }
 
         rebuildcommands 
         {
-            "../../Engine/Scripts/Rebuild.bat -$(Configuration) -$(VC_IncludePath) -$(WindowsSDK_IncludePath) -$(VC_LibraryPath_x64) -$(WindowsSDK_LibraryPath_x64)"
+            "../../Engine/Scripts/Rebuild.bat -$(Configuration) -$(VC_IncludePath) -$(WindowsSDK_IncludePath) -$(VC_LibraryPath_x64) -$(WindowsSDK_LibraryPath_x64) -$(VC_PGO_RunTime_Dir)"
         }
         
         cleancommands 

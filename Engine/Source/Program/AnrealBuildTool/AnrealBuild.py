@@ -5,19 +5,17 @@ import json
 
 RootDir = Anreal.GetAnrealRootDir()
 RootOutputDir = RootDir + "/Engine/Binaries/"
+AnrealBuildToolPath = RootDir + "/Engine/Source/Program/AnrealBuildTool"
 
-def ParseAndGetClCmdLine(config, includePath, description) :
-    return ""
-
-def ParseAndGetLinkCmdLine(config, libPath, description) :
-    return ""
+sys.path.append(AnrealBuildToolPath)
+import AnrealMVCS
 
 def PromptBuildModule(args, description) :
     print("Module : {0}".format(description.ModuleName))
-    CLCommandLine = ParseAndGetClCmdLine(args["Config"], args["IncludePaths"], description)
+    CLCommandLine = AnrealMVCS.ParseAndGetClCmdLine(args, description)
     #os.system(CLCommandLine)
 
-    LinkCommandLine = ParseAndGetLinkCmdLine(args["Config"], args["LibPaths"], description)
+    LinkCommandLine = AnrealMVCS.ParseAndGetLinkCmdLine(args, description)
     #os.system(LinkCommandLine)
 
 def FindAsName(moduleName, buildDesc) :
@@ -45,14 +43,17 @@ def BuildOderingByDependencies(buildDescs) :
 
 def PromptBuildProgram(args, program) :
     print("Start Build Program : {0}".format(program))
-    ProgramDir = RootDir + "/Engine/Source/" +  program
-    Modules = os.listdir(ProgramDir)
+    ProgramPath = RootDir + "/Engine/Source/" +  program
+    Modules = os.listdir(ProgramPath)
 
     BuildDescList = []
     for Module in Modules :
-        sys.path.append(ProgramDir + '/' + Module)
+        ModulePath = ProgramPath + '/' + Module
+        sys.path.append(ModulePath)
         BuildScript = __import__(Module + "Build")
         Description = BuildScript.GetBuildDesc()
+        Description.ProgramPath = ProgramPath
+        Description.ModulePath = ModulePath
         BuildDescList.append(Description)
 
     OrdererdBuildDescList = BuildOderingByDependencies(BuildDescList)
@@ -84,7 +85,7 @@ class BuildCmdList :
         MergedCmd = ""
         FirstSplitedCmd = []
         for cmd in sys.argv :
-            MergedCmd += cmd
+            MergedCmd += cmd + ' '
         FirstSplitedCmd = MergedCmd.split('-')
 
         # naive cmd legend (indicate FirstSplitedCmd)
@@ -95,9 +96,10 @@ class BuildCmdList :
         # 5, 6 - Basic Lib path 
 
         # First - Set build type and erase elm unnecessaries
-        BuildType = FirstSplitedCmd[1]
+        BuildType = FirstSplitedCmd[1].strip()
         if BuildType == "Build" :
             self.IsBuild = True
+            print("build")
         elif BuildType == "ReBuild" :
             self.IsRebuild = True
         # Second - Set Config flag
@@ -124,6 +126,8 @@ class BuildCmdList :
                 LibPathList.append(path)
                 # print(path)
         self.Args["LibPaths"] = LibPathList
+
+        self.Args["VCRuntime"] = FirstSplitedCmd[7].strip()
 
     def exec(self) :
         if self.IsBuild == True :
