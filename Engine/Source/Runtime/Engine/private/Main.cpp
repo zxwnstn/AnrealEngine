@@ -5,12 +5,12 @@ extern MainLoop* LoopInst;
 
 int Run()
 {
-	while (!RequestedExit())
+	while (true)
 	{
 		float DeltaTime = 1.0f;//Ticker::GetTickTime();
 		LoopInst->Tick(DeltaTime);
 	}
-	return GetExitCode();
+	return 0;
 }
 
 int EngineMain(int argc, char* argv[])

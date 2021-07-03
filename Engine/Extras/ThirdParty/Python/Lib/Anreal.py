@@ -19,6 +19,17 @@ def GetAnrealRootDir() :
     Ret = RootPath
     return Ret
 
+
+
+def GatherFilesFromRecursiveIterate(inOutFiles, path, desiredExtension) :
+    ListDir = os.listdir(path)
+    for candidate in ListDir :
+        if os.path.isfile(path + '/' + candidate) == True :
+            if candidate.endswith(desiredExtension) :
+                inOutFiles.append(path + '/' + candidate)
+        elif os.path.isdir(path + '/' + candidate) == True :
+            GatherFilesFromRecursiveIterate(inOutFiles, path + '/' + candidate, desiredExtension)
+
 class BuildDesc :
     def __init__(self) :
         self.ModuleName = ""
@@ -32,6 +43,15 @@ class BuildDesc :
         pass
     
     def SetOther(self) :
+        pass
+
+class BuildCmdList :
+    def __init__(self) :
+        self.Args = {}
+        self.IsBuild = False
+        self.IsRebuild = False
+
+    def exec(self) :
         pass
 
 class INIReader :
@@ -67,6 +87,12 @@ class INIReader :
     def GetKeys(self) :
         return self.Data.keys()
 
+RootPath = GetAnrealRootDir()
+BinPath = RootPath + "/Engine/Binaries/"
+BuildToolPath = RootPath + "/Engine/Source/Program/AnrealBuildTool"
+ConfigPath = RootPath + "/Engine/Configs"
+ObjPath = RootPath + "/Engine/Objs"
+
 PremakeBasicScript = """
 workspace "Anreal"
     configurations
@@ -85,22 +111,23 @@ workspace "Anreal"
     characterset ("Unicode")
 	startproject "Engine"
     filter "system:windows"
-        cppdialect "C++17"
-	
+	cppdialect "C++17"
+
     group "Engine"
         project "Engine"
 	    location "Projects/Engine"
 	    kind "Makefile"
 	    language "C++"
+        cppdialect "C++17"
 
         buildcommands 
         {
-            "../../Engine/Scripts/Build.bat -$(Configuration) -$(VC_IncludePath) -$(WindowsSDK_IncludePath) -$(VC_LibraryPath_x64) -$(WindowsSDK_LibraryPath_x64) -$(VC_PGO_RunTime_Dir)"
+            {0}
         }
 
         rebuildcommands 
         {
-            "../../Engine/Scripts/Rebuild.bat -$(Configuration) -$(VC_IncludePath) -$(WindowsSDK_IncludePath) -$(VC_LibraryPath_x64) -$(WindowsSDK_LibraryPath_x64) -$(VC_PGO_RunTime_Dir)"
+            {1}
         }
         
         cleancommands 
@@ -114,6 +141,13 @@ workspace "Anreal"
 		    "Engine/Source/Runtime/**.cpp",
             "Engine/Source/Runtime/**.py"
         }
+
+        includedirs
+	    {
+		    "Engine/Source/Runtime/",
+            "Engine/Source/Runtime/*/public"
+	    }
+
     group ""
 
     group "Program"
@@ -138,3 +172,13 @@ workspace "Anreal"
         }
     group ""
 """
+
+VS2019CommandLines = ["\"../../Engine/Scripts/Build.bat -vs2019 -$(Configuration) -$(VC_IncludePath) -$(WindowsSDK_IncludePath) -$(VC_LibraryPath_x64) -$(WindowsSDK_LibraryPath_x64) -$(VC_PGO_RunTime_Dir)\"", "\"../../Engine/Scripts/Rebuild.bat -vs2019 -$(Configuration) -$(VC_IncludePath) -$(WindowsSDK_IncludePath) -$(VC_LibraryPath_x64) -$(WindowsSDK_LibraryPath_x64) -$(VC_PGO_RunTime_Dir)\""]
+
+def GetPremakeScript(target) :
+    Script = PremakeBasicScript
+    if target == "vs2019" :
+        Script = Script.replace("{0}", VS2019CommandLines[0])
+        Script = Script.replace("{1}", VS2019CommandLines[0])
+
+    return Script

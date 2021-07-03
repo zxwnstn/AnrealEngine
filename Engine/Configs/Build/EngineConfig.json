@@ -4,7 +4,8 @@
     "CPP17",
     "UNICODE",
     "DebugJustMyCode",
-    "CPPRuntime_Dynamic"
+    "CPPRuntime_Dynamic",
+    "NO_CL_COMPLETE"
   ],
 
   "DebugEditor": [

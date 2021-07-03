@@ -1,4 +1,4 @@
-#include "pch.h"
+#include "PublicPCH/pch.h"
 #include "ModuleManager.h"
 
 ModuleManager::ModuleManager()
@@ -17,9 +17,9 @@ ModuleManager * ModuleManager::Get()
 
 void ModuleManager::ShotDown()
 {
-	for (auto& [Name, Module] : ModuleInstList)
+	for (auto& Moudle : ModuleInstList)
 	{
-		Module->DestroyInst();
+		Moudle.second->DestroyInst();
 	}
 }
 
