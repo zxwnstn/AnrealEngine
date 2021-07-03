@@ -1,0 +1,46 @@
+{
+  "Common": [
+    "NoComilerExecLog",
+    "CPP17",
+    "UNICODE",
+    "DebugJustMyCode",
+    "CPPRuntime_Dynamic"
+  ],
+
+  "DebugEditor": [
+    "CreateSymbolDB",
+    "EnableDebug",
+    "Optimize_Min",
+    "D_WITH_EDITOR"
+  ],
+
+  "DebugGame": [
+    "CreateSymbolDB",
+    "EnableDebug",
+    "Optimize_Min"
+  ],
+
+  "DevelopEditor": [
+    "CreateSymbolDB",
+    "EnableDebug",
+    "Optimize_Mid",
+    "D_WITH_EDITOR"
+  ],
+
+  "DevelopGame": [
+    "CreateSymbolDB",
+    "EnableDebug",
+    "Optimize_Mid"
+  ],
+
+  "ShippingEditor": [
+    "D_WITH_EDITOR",
+    "D_SHIPPING",
+    "Optimize_Max"
+  ],
+
+  "ShippingGame": [
+    "Optimize_Max",
+    "D_SHIPPING"
+  ]
+}

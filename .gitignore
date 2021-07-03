@@ -7,7 +7,7 @@ premake5.lua
 GenerateProjectFiles.bat
 Engine/obj
 __pycache__/
-build
 CMakeLists.txt
 Generate.bat
 Projects
+Binaries
