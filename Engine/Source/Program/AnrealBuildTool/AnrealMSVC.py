@@ -3,7 +3,7 @@ import sys
 import Anreal
 import AnrealConfigMapper
 
-def ParseAndGetClCmdLine(args, clOptions, description) :
+def CreateClCmdLine(args, clOptions, description, sources) :
     ClCmdLine = ""
 
     #formating execute Cl command
@@ -24,10 +24,8 @@ def ParseAndGetClCmdLine(args, clOptions, description) :
     ClCmdLine += " /I \"" + description.ModulePath + "\"" 
     ClCmdLine += " /I \"" + description.ModulePath + "/public\"" 
 
-    #Gather and attach cpp files that will be compile
-    CppFiles = []
-    Anreal.GatherFilesFromRecursiveIterate(CppFiles, description.ModulePath, "cpp")
-    for Cpp in CppFiles :
+    #Attach cpp files that will be compile
+    for Cpp in sources :
         ClCmdLine += ' ' + Cpp
 
     #Attach native build options
@@ -36,17 +34,62 @@ def ParseAndGetClCmdLine(args, clOptions, description) :
 
     return ClCmdLine
 
-def ParseAndGetLinkCmdLine(args, buildConfigOptions, description) :
-    return ""
+def CreateLinkCmdLine(args, linkOptions, description, objs, objsPath, binPath) :
+    
+    LinkCmdLine = ""
+    
+    Config = args["Config"]
+    LinkPath = args["VCRuntime"]
+    Index = LinkPath.find('\\')
+    LinkPath = LinkPath[:Index] + '\"' + LinkPath[Index:]
+
+    #Choose lib.exe or link.exe
+    if Config == "ShippingGame" or Config == "ShippingEditor" :
+        LinkCmdLine = LinkPath + "\"" + "/lib.exe"
+    else :
+        LinkCmdLine = LinkPath + "\"" + "/link.exe"
+
+    #Add Module Lib Path
+    LibPaths = args["LibPaths"]
+    for LibPath in LibPaths:
+        LinkCmdLine += " /LIBPATH:\"" + LibPath + "\""
+    LinkCmdLine += " /LIBPATH:\"" + binPath + "\""
+
+    #Attach obj files that will be link
+    for obj in objs :
+       LinkCmdLine += " \"" + objsPath + '/' + obj + ".obj\""
+
+    #Attach dependency
+
+
+    #Attach native build options
+    # for linkOpt in linkOptions :
+    #    LinkCmdLine += ' ' + linkOpt
+    LinkCmdLine += " /DLL /DEBUG /PDB:" + description.ModuleName + ".pdb"
+
+    LinkCmdLine += " /nologo "
+
+    return LinkCmdLine
 
 def PromptBuildModule(args, nativeBuildOptions, description) :
-    os.chdir(Anreal.ObjPath)
-    CLCommandLine = ParseAndGetClCmdLine(args, nativeBuildOptions["CL"], description)
+
+    Sources = []
+    Anreal.GatherFilesFromRecursiveIterate(Sources, description.ModulePath, "cpp")
+    
+    ObjsPath = Anreal.ObjPath + "/" + args["Config"] + "/" + args["Compiler"]
+    Anreal.TryCreatePath(ObjsPath)
+    os.chdir(ObjsPath)
+    CLCommandLine = CreateClCmdLine(args, nativeBuildOptions["CL"], description, Sources)
     os.system(CLCommandLine)
 
-    os.chdir(Anreal.BinPath)
-    LinkCommandLine = ParseAndGetLinkCmdLine(args, nativeBuildOptions["Link"], description)
-    #os.system(LinkCommandLine)
+    Objs = []
+    Anreal.GatherOnlyFileNameFromSourceList(Sources, Objs)
+
+    BinPath = Anreal.BinPath + "/" + args["Config"] + "/" + args["Compiler"]
+    Anreal.TryCreatePath(BinPath)
+    os.chdir(BinPath)
+    LinkCommandLine = CreateLinkCmdLine(args, nativeBuildOptions["Link"], description, Objs, ObjsPath, BinPath)
+    os.system(LinkCommandLine)
 
 def FindBuildDescAsName(moduleName, buildDesc) :
     for Description in buildDesc :
@@ -92,8 +135,12 @@ def PromptBuildProgram(args, program) :
         BuildDescList.append(Description)
 
     OrdererdBuildDescList = BuildOderingByDependencies(BuildDescList)
+    i = 0
     for Description in OrdererdBuildDescList :
+        if i != 0 :
+            break
         PromptBuildModule(args, NativeBuildOptions, Description)
+        i += 1
 
 def RunBuild(args) :
     SourceDir = Anreal.RootPath + '/' + "Engine/Source" 
@@ -137,20 +184,19 @@ class MSCVBuildCmdList(Anreal.BuildCmdList) :
         FullIncludePath = FirstSplitedCmd[4] + ';' + FirstSplitedCmd[5]
         TokkenizedIncludePaths = FullIncludePath.split(';')
         for path in TokkenizedIncludePaths :
-            path.strip()
+            path = path.strip()
             if path != "" :
                 IncludePathList.append(path)
         self.Args["IncludePaths"] = IncludePathList
 
         # Forth - Fill lib path with exactly tokkenized paths FirstSplitedCmd[6], FirstSplitedCmd[7]
         LibPathList = []
-        FullLibPath = FirstSplitedCmd[5] + ';' + FirstSplitedCmd[6]
+        FullLibPath = FirstSplitedCmd[6] + ';' + FirstSplitedCmd[7]
         TokkenizedIncludePaths = FullLibPath.split(';')
         for path in TokkenizedIncludePaths :
-            path.strip()
+            path = path.strip()
             if path != "" :
                 LibPathList.append(path)
-                # print(path)
         self.Args["LibPaths"] = LibPathList
 
         self.Args["VCRuntime"] = FirstSplitedCmd[8].strip()

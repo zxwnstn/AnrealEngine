@@ -20,7 +20,10 @@ def GetAnrealRootDir() :
     Ret = RootPath
     return Ret
 
-
+def TryCreatePath(path) :
+    if os.path.exists(path) : 
+        return
+    os.makedirs(path)
 
 def GatherFilesFromRecursiveIterate(inOutFiles, path, desiredExtension) :
     ListDir = os.listdir(path)
@@ -30,6 +33,12 @@ def GatherFilesFromRecursiveIterate(inOutFiles, path, desiredExtension) :
                 inOutFiles.append(path + '/' + candidate)
         elif os.path.isdir(path + '/' + candidate) == True :
             GatherFilesFromRecursiveIterate(inOutFiles, path + '/' + candidate, desiredExtension)
+
+def GatherOnlyFileNameFromSourceList(inSources, outNameList) :
+    for Source in inSources :
+        s = os.path.splitext(Source)
+        s = os.path.split(s[0])
+        outNameList.append(s[1])
 
 class BuildDesc :
     def __init__(self) :

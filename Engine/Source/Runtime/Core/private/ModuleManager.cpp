@@ -1,6 +1,8 @@
 #include "PublicPCH/pch.h"
 #include "ModuleManager.h"
 
+std::unordered_map<Name, IModule*> ModuleManager::ModuleInstList;
+
 ModuleManager::ModuleManager()
 {
 }
