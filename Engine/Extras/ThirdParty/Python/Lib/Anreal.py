@@ -1,4 +1,5 @@
 import os
+import json
 
 def GetAnrealRootDir() :
     Ret = os.getcwd()
@@ -86,6 +87,30 @@ class INIReader :
 
     def GetKeys(self) :
         return self.Data.keys()
+
+class ConfigMapper :
+    def __init__(self) :
+        self.Compiler = ""
+        self.NativeBuildOptions = {}
+        self.AbstractedOptions = []
+        pass
+    
+    def MapNativeBuildOpt(self) :
+        pass
+
+    def GatherAbstractedBuildOptions(self, config) :
+        with open(ConfigPath + "/Build/EngineConfig.json") as EngineConfigJson :
+            EngineConfigs = json.load(EngineConfigJson)
+    
+        self.AbstractedOptions= EngineConfigs[config]
+        CommonOptions= EngineConfigs["Common"]
+        for CommonOption in CommonOptions :
+            self.AbstractedOptions.append(CommonOption)
+
+    def ParseAndGetMappedBuildOptions(self, config) :
+        self.GatherAbstractedBuildOptions(config)
+        self.MapNativeBuildOpt()
+        return self.NativeBuildOptions
 
 RootPath = GetAnrealRootDir()
 BinPath = RootPath + "/Engine/Binaries/"
