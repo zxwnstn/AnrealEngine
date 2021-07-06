@@ -16,3 +16,10 @@ void MainLoop::Init()
 void MainLoop::Tick(float deltaTime)
 {
 }
+
+MainLoop* LoopInst;
+
+ENGINE_API int GetSome()
+{
+	return 11;
+}

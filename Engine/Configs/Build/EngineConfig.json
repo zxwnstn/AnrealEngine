@@ -1,24 +1,24 @@
 {
   "Common": [
-    "NoComilerExecLog",
     "CPP17",
     "UNICODE",
     "DebugJustMyCode",
     "CPPRuntime_Dynamic",
-    "NO_CL_COMPLETE"
+    "NO_CL_LINK",
+    "EnableCPPException"
   ],
 
   "DebugEditor": [
     "CreateSymbolDB",
     "EnableDebug",
-    "Optimize_Min",
+    "Optimize_None",
     "D_WITH_EDITOR"
   ],
 
   "DebugGame": [
     "CreateSymbolDB",
     "EnableDebug",
-    "Optimize_Min"
+    "Optimize_None"
   ],
 
   "DevelopEditor": [

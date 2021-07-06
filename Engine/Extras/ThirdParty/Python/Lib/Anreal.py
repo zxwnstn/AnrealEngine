@@ -46,6 +46,7 @@ class BuildDesc :
         self.ModulePath = ""
         self.ProgramPath = ""
         self.DependencyList = []
+        self.Executable = False
         self.SetDependency()
         self.SetOther()
     
@@ -53,15 +54,6 @@ class BuildDesc :
         pass
     
     def SetOther(self) :
-        pass
-
-class BuildCmdList :
-    def __init__(self) :
-        self.Args = {}
-        self.IsBuild = False
-        self.IsRebuild = False
-
-    def exec(self) :
         pass
 
 class INIReader :
@@ -126,6 +118,7 @@ BinPath = RootPath + "/Engine/Binaries/"
 BuildToolPath = RootPath + "/Engine/Source/Program/AnrealBuildTool"
 ConfigPath = RootPath + "/Engine/Configs"
 ObjPath = RootPath + "/Engine/Objs"
+ConfigLists = ["DebugEditor", "DebugGame", "DevelopEditor", "DevelopGame", "ShippingEditor", "ShippingGame"]
 
 PremakeBasicScript = """
 workspace "Anreal"

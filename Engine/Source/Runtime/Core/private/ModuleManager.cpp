@@ -26,7 +26,7 @@ void ModuleManager::ShotDown()
 }
 
 
-void ModuleManager::Init(const std::vector<Name>& list)
+CORE_API void ModuleManager::Init(const std::vector<Name>& list)
 {
 }
 

@@ -4,9 +4,8 @@
       "CPP17": "/std:c++17",
       "CPP14": "/std:c++14",
       "DebugJustMyCode": "/JMC",
-      "NoComilerExecLog": "/nologo",
 
-      "Optimize_Min": "/Od",
+      "Optimize_None": "/Od",
       "Optimize_Mid": "/O1",
       "Optimize_Max": "/O2 /GL",
       "EnableCPPException": "/EHsc",
@@ -26,12 +25,10 @@
       "UNICODE": "/D _UNICODE /D UNICODE",
       "D_WITH_EDITOR": "/D WITH_EDITOR",
       "D_SHIPPING": "/D SHIPPING_BUILD",
-      "NO_CL_COMPLETE": "/c"
+      "NO_CL_LINK": "/c"
     },
     "Link": {
-      "STATIC": "",
-      "DYNAMIC": "/DLL",
-      "CreateSymbolDB": "/PDB"
+      "CreateSymbolDB" : "/DEBUG /PDB:"
     }
   }
 }

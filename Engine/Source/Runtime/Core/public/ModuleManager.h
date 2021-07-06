@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core.h"
 #include "Type.h"
 
 class IModule
@@ -19,7 +20,7 @@ public:
 	void ShotDown();
 
 public:
-	void Init(const std::vector<Name>& list);
+	CORE_API void Init(const std::vector<Name>& list);
 	
 	IModule* GetModule(NameRef moduleName);
 	

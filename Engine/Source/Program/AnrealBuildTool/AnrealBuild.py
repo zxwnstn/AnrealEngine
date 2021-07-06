@@ -2,8 +2,10 @@ import os
 import sys
 import Anreal
 sys.path.append(Anreal.BuildToolPath)
+import AnrealMSVC
+import AnrealBuilder
 
-def GetBuildCmdList() :
+def GetBuilder() :
     FirstSplitedCmd = []
     MergedCmd = ""
     for cmd in sys.argv :
@@ -13,12 +15,12 @@ def GetBuildCmdList() :
     Compiler = FirstSplitedCmd[2].strip()
     if Compiler == "vs2017" or Compiler == "vs2019" :
         import AnrealMSVC
-        return AnrealMSVC.MSCVBuildCmdList(FirstSplitedCmd)
+        return AnrealMSVC.MSCVBuilder(FirstSplitedCmd)
 
 def main() :
     os.chdir(Anreal.RootPath)
-    CmdList = GetBuildCmdList()
-    CmdList.exec()
+    Builder = GetBuilder()
+    Builder.exec()
 
 if __name__ == '__main__':
     main()

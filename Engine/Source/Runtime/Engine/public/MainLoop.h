@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Engine.h"
+
 class MainLoop
 {
 private:
@@ -10,7 +12,6 @@ public:
 	void Init();
 	void Tick(float deltaTime);
 
-
 };
 
-MainLoop* LoopInst = nullptr;
+ENGINE_API int GetSome();

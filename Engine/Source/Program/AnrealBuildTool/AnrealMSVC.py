@@ -1,38 +1,7 @@
 import os
 import sys
 import Anreal
-import AnrealConfigMapper
-
-def CreateClCmdLine(args, clOptions, description, sources) :
-    ClCmdLine = ""
-
-    #formating execute Cl command
-    ClPath =  args["VCRuntime"]
-    Index = ClPath.find('\\')
-    ClPath = ClPath[:Index] + '\"' + ClPath[Index:]
-
-    #Execute cl.exe command
-    ClCmdLine += ClPath + "\"" + "\cl.exe"
-
-    #Add Basic Include Paths
-    IncludePaths = args["IncludePaths"]
-    for includePath in IncludePaths:
-        ClCmdLine += " /I \"" + includePath + "\""
-
-    #Add Module Include Path
-    ClCmdLine += " /I \"" + description.ProgramPath + "\""
-    ClCmdLine += " /I \"" + description.ModulePath + "\"" 
-    ClCmdLine += " /I \"" + description.ModulePath + "/public\"" 
-
-    #Attach cpp files that will be compile
-    for Cpp in sources :
-        ClCmdLine += ' ' + Cpp
-
-    #Attach native build options
-    for clOpt in clOptions :
-        ClCmdLine += ' ' + clOpt
-
-    return ClCmdLine
+import AnrealBuilder
 
 def CreateLinkCmdLine(args, linkOptions, description, objs, objsPath, binPath) :
     
@@ -60,104 +29,66 @@ def CreateLinkCmdLine(args, linkOptions, description, objs, objsPath, binPath) :
        LinkCmdLine += " \"" + objsPath + '/' + obj + ".obj\""
 
     #Attach dependency
-
+    for Dependency in description.DependencyList :
+        LinkCmdLine += " " + Dependency + ".lib"
 
     #Attach native build options
-    # for linkOpt in linkOptions :
-    #    LinkCmdLine += ' ' + linkOpt
-    LinkCmdLine += " /DLL /DEBUG /PDB:" + description.ModuleName + ".pdb"
+    for linkOpt in linkOptions :
+        LinkCmdLine += ' ' + linkOpt
+        if linkOpt.endswith('/PDB:') :
+            LinkCmdLine += description.ModuleName + '.pdb' 
+    LinkCmdLine += " /nologo"
 
-    LinkCmdLine += " /nologo "
+    #Set output
+    if description.Executable == False :
+        LinkCmdLine += " /OUT:" + description.ModuleName
+        if Config == "ShippingGame" or Config == "ShippingEditor" :
+            LinkCmdLine += ".lib"
+            pass
+        else :
+            LinkCmdLine += ".dll /DLL"
+    else :
+        LinkCmdLine += " /OUT:" + "AnrealEditor.exe"
 
     return LinkCmdLine
 
-def PromptBuildModule(args, nativeBuildOptions, description) :
+def CreateClCmdLine(args, clOptions, description, sources) :
+    ClCmdLine = ""
 
-    Sources = []
-    Anreal.GatherFilesFromRecursiveIterate(Sources, description.ModulePath, "cpp")
-    
-    ObjsPath = Anreal.ObjPath + "/" + args["Config"] + "/" + args["Compiler"]
-    Anreal.TryCreatePath(ObjsPath)
-    os.chdir(ObjsPath)
-    CLCommandLine = CreateClCmdLine(args, nativeBuildOptions["CL"], description, Sources)
-    os.system(CLCommandLine)
+    #formating execute Cl command
+    ClPath =  args["VCRuntime"]
+    Index = ClPath.find('\\')
+    ClPath = ClPath[:Index] + '\"' + ClPath[Index:]
 
-    Objs = []
-    Anreal.GatherOnlyFileNameFromSourceList(Sources, Objs)
+    #Execute cl.exe command
+    ClCmdLine += ClPath + "\"" + "\cl.exe"
 
-    BinPath = Anreal.BinPath + "/" + args["Config"] + "/" + args["Compiler"]
-    Anreal.TryCreatePath(BinPath)
-    os.chdir(BinPath)
-    LinkCommandLine = CreateLinkCmdLine(args, nativeBuildOptions["Link"], description, Objs, ObjsPath, BinPath)
-    os.system(LinkCommandLine)
+    #Add Basic Include Paths
+    IncludePaths = args["IncludePaths"]
+    for includePath in IncludePaths:
+        ClCmdLine += " /I \"" + includePath + "\""
 
-def FindBuildDescAsName(moduleName, buildDesc) :
-    for Description in buildDesc :
-        if Description.ModuleName == moduleName :
-            return Description
+    #Add Module Include Path
+    ClCmdLine += " /I \"" + description.ProgramPath + "\""
+    ClCmdLine += " /I \"" + description.ModulePath + "\"" 
+    ClCmdLine += " /I \"" + description.ModulePath + "/public\"" 
 
-def BuildOderingByDependencies(buildDescs) : 
-    WorkList = buildDescs
-    OrdererdBuildDescList = []
+    #Attach cpp files that will be compile
+    for Cpp in sources :
+        ClCmdLine += ' ' + Cpp
 
-    while len(WorkList) != 0 :
-        for Description in WorkList :
-            if len(Description.DependencyList) == 0 :
-                CheckedModule = Description.ModuleName
-                OrdererdBuildDescList.append(FindBuildDescAsName(CheckedModule, buildDescs))
-                WorkList.remove(Description)
-                for Description in WorkList :
-                    for Dependency in Description.DependencyList :
-                        if Dependency == CheckedModule :
-                            Description.DependencyList.remove(CheckedModule)
-                            break
+    #Add identity macro
+    UpperModuleName = description.ModuleName.upper()
+    ClCmdLine += " /D\"" + UpperModuleName + "_IMPL\""
 
-    return OrdererdBuildDescList
+    #Attach native build options
+    for clOpt in clOptions :
+        ClCmdLine += ' ' + clOpt
+    ClCmdLine += " /nologo"
 
-def PromptBuildProgram(args, program) :
-    ProgramPath = Anreal.RootPath + "/Engine/Source/" +  program
-    Modules = os.listdir(ProgramPath)
+    return ClCmdLine
 
-    ConfigMapper = AnrealConfigMapper.GetConfigMapper(args["Compiler"])
-    NativeBuildOptions = ConfigMapper.ParseAndGetMappedBuildOptions(args["Config"])
-
-    BuildDescList = []
-    for Module in Modules :
-        if Module == "PublicPCH" :
-            continue
-
-        ModulePath = ProgramPath + '/' + Module
-        sys.path.append(ModulePath)
-        BuildScript = __import__(Module + "Build")
-        Description = BuildScript.GetBuildDesc()
-        Description.ProgramPath = ProgramPath
-        Description.ModulePath = ModulePath
-        BuildDescList.append(Description)
-
-    OrdererdBuildDescList = BuildOderingByDependencies(BuildDescList)
-    i = 0
-    for Description in OrdererdBuildDescList :
-        if i != 0 :
-            break
-        PromptBuildModule(args, NativeBuildOptions, Description)
-        i += 1
-
-def RunBuild(args) :
-    SourceDir = Anreal.RootPath + '/' + "Engine/Source" 
-    ProgramCategories = os.listdir(SourceDir)
-    for Program in ProgramCategories :
-        if Program == "Program" : 
-            continue
-        PromptBuildProgram(args, Program)
-
-def RunClean() :
-    pass 
-
-def RunRebuild(args) :
-    RunClean()
-    RunBuild(args)
-
-class MSCVBuildCmdList(Anreal.BuildCmdList) :
+class MSCVBuilder(AnrealBuilder.BasicBuilder) :
     def __init__(self, FirstSplitedCmd) :
         # MSVC cmd legend (indicate FirstSplitedCmd)
         # 0 - Exec argument
@@ -165,13 +96,12 @@ class MSCVBuildCmdList(Anreal.BuildCmdList) :
         # 2 - Config
         # 3, 4 - Basic Include path
         # 5, 6 - Basic Lib path 
-        Anreal.BuildCmdList.__init__(self)
+        AnrealBuilder.BasicBuilder.__init__(self)
 
         # First - Set build type and erase elm unnecessaries
         BuildType = FirstSplitedCmd[1].strip()
         if BuildType == "Build" :
             self.IsBuild = True
-            print("build")
         elif BuildType == "ReBuild" :
             self.IsRebuild = True
 
@@ -201,10 +131,22 @@ class MSCVBuildCmdList(Anreal.BuildCmdList) :
 
         self.Args["VCRuntime"] = FirstSplitedCmd[8].strip()
 
-    def exec(self) :
-        if self.IsBuild == True :
-            RunBuild(self.Args)
-        elif self.IsRebuild == True :
-            RunRebuild(self.Args)
-        else :
-            RunClean()
+    
+    def PromptBuildModule(self, args, nativeBuildOptions, description) :
+        Sources = []
+        Anreal.GatherFilesFromRecursiveIterate(Sources, description.ModulePath, "cpp")
+    
+        ObjsPath = Anreal.ObjPath + "/" + args["Config"] + "/" + args["Compiler"]
+        Anreal.TryCreatePath(ObjsPath)
+        os.chdir(ObjsPath)
+        CLCommandLine = CreateClCmdLine(args, nativeBuildOptions["CL"], description, Sources)
+        os.system(CLCommandLine)
+
+        Objs = []
+        Anreal.GatherOnlyFileNameFromSourceList(Sources, Objs)
+
+        BinPath = Anreal.BinPath + "/" + args["Config"] + "/" + args["Compiler"]
+        Anreal.TryCreatePath(BinPath)
+        os.chdir(BinPath)
+        LinkCommandLine = CreateLinkCmdLine(args, nativeBuildOptions["Link"], description, Objs, ObjsPath, BinPath)
+        os.system(LinkCommandLine)
