@@ -7,6 +7,11 @@
 #include <memory>
 
 #ifdef _WIN32
-	#define EXPORT __declspec(dllexport)
-	#define IMPORT __declspec(dllimport)
+	#ifndef SHIPPING_BUILD
+		#define EXPORT __declspec(dllexport)
+		#define IMPORT __declspec(dllimport)
+	#else
+		#define EXPORT
+		#define IMPORT
+	#endif
 #endif

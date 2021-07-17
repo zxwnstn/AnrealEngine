@@ -13,10 +13,13 @@ def CreateLinkCmdLine(args, linkOptions, description, objs, objsPath, binPath) :
     LinkPath = LinkPath[:Index] + '\"' + LinkPath[Index:]
 
     #Choose lib.exe or link.exe
-    if Config == "ShippingGame" or Config == "ShippingEditor" :
-        LinkCmdLine = LinkPath + "\"" + "/lib.exe"
+    if description.Executable == False :
+        if Config == "ShippingGame" or Config == "ShippingEditor" :
+            LinkCmdLine = LinkPath + "\"" + "/lib.exe"
+        else :
+            LinkCmdLine = LinkPath + "\"" + "/link.exe"
     else :
-        LinkCmdLine = LinkPath + "\"" + "/link.exe"
+         LinkCmdLine = LinkPath + "\"" + "/link.exe"
 
     #Add Module Lib Path
     LibPaths = args["LibPaths"]
@@ -29,8 +32,13 @@ def CreateLinkCmdLine(args, linkOptions, description, objs, objsPath, binPath) :
        LinkCmdLine += " \"" + objsPath + '/' + obj + ".obj\""
 
     #Attach dependency
-    for Dependency in description.DependencyList :
-        LinkCmdLine += " " + Dependency + ".lib"
+    if description.Executable == False :
+        if Config != "ShippingGame" and Config != "ShippingEditor" :
+            for Dependency in description.DependencyList :
+                LinkCmdLine += " " + Dependency + ".lib"
+    else :
+        for Dependency in description.DependencyList :
+            LinkCmdLine += " " + Dependency + ".lib"
 
     #Attach native build options
     for linkOpt in linkOptions :

@@ -2,7 +2,6 @@
   "Common": [
     "CPP17",
     "UNICODE",
-    "DebugJustMyCode",
     "CPPRuntime_Dynamic",
     "NO_CL_LINK",
     "EnableCPPException"
@@ -11,6 +10,7 @@
   "DebugEditor": [
     "CreateSymbolDB",
     "EnableDebug",
+    "DebugJustMyCode",
     "Optimize_None",
     "D_WITH_EDITOR"
   ],
@@ -18,12 +18,14 @@
   "DebugGame": [
     "CreateSymbolDB",
     "EnableDebug",
+    "DebugJustMyCode",
     "Optimize_None"
   ],
 
   "DevelopEditor": [
     "CreateSymbolDB",
     "EnableDebug",
+    "DebugJustMyCode",
     "Optimize_Mid",
     "D_WITH_EDITOR"
   ],
@@ -31,6 +33,7 @@
   "DevelopGame": [
     "CreateSymbolDB",
     "EnableDebug",
+    "DebugJustMyCode",
     "Optimize_Mid"
   ],
 

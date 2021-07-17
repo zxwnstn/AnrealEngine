@@ -7,7 +7,7 @@
 
       "Optimize_None": "/Od",
       "Optimize_Mid": "/O1",
-      "Optimize_Max": "/O2 /GL",
+      "Optimize_Max": "/O2",
       "EnableCPPException": "/EHsc",
       "EnableDebug": "/Zi",
 
@@ -39,7 +39,7 @@
 
       "Optimize_None": "/Od",
       "Optimize_Mid": "/O1",
-      "Optimize_Max": "/O2 /GL",
+      "Optimize_Max": "/O2",
       "EnableCPPException": "/EHsc",
       "EnableDebug": "/Zi",
 
