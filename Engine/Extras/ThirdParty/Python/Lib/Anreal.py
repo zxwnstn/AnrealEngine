@@ -200,10 +200,14 @@ workspace "Anreal"
     group ""
 """
 
+VS2017CommandLines = ["\"../../Engine/Scripts/Build.bat -vs2017 -$(Configuration) -$(VC_IncludePath) -$(WindowsSDK_IncludePath) -$(VC_LibraryPath_x64) -$(WindowsSDK_LibraryPath_x64) -$(VC_PGO_RunTime_Dir)\"", "\"../../Engine/Scripts/Rebuild.bat -vs2019 -$(Configuration) -$(VC_IncludePath) -$(WindowsSDK_IncludePath) -$(VC_LibraryPath_x64) -$(WindowsSDK_LibraryPath_x64) -$(VC_PGO_RunTime_Dir)\""]
 VS2019CommandLines = ["\"../../Engine/Scripts/Build.bat -vs2019 -$(Configuration) -$(VC_IncludePath) -$(WindowsSDK_IncludePath) -$(VC_LibraryPath_x64) -$(WindowsSDK_LibraryPath_x64) -$(VC_PGO_RunTime_Dir)\"", "\"../../Engine/Scripts/Rebuild.bat -vs2019 -$(Configuration) -$(VC_IncludePath) -$(WindowsSDK_IncludePath) -$(VC_LibraryPath_x64) -$(WindowsSDK_LibraryPath_x64) -$(VC_PGO_RunTime_Dir)\""]
 
 def GetPremakeScript(target) :
     Script = PremakeBasicScript
+    if target == "vs2017" :
+        Script = Script.replace("{0}", VS2017CommandLines[0])
+        Script = Script.replace("{1}", VS2017CommandLines[0])
     if target == "vs2019" :
         Script = Script.replace("{0}", VS2019CommandLines[0])
         Script = Script.replace("{1}", VS2019CommandLines[0])

@@ -28,7 +28,39 @@
       "NO_CL_LINK": "/c"
     },
     "Link": {
-      "CreateSymbolDB" : "/DEBUG /PDB:"
+      "CreateSymbolDB": "/DEBUG /PDB:"
+    }
+  },
+  "vs2017": {
+    "CL": {
+      "CPP17": "/std:c++17",
+      "CPP14": "/std:c++14",
+      "DebugJustMyCode": "/JMC",
+
+      "Optimize_None": "/Od",
+      "Optimize_Mid": "/O1",
+      "Optimize_Max": "/O2 /GL",
+      "EnableCPPException": "/EHsc",
+      "EnableDebug": "/Zi",
+
+      "CPPRuntime_Dynamic_Debug": "/MDd",
+      "CPPRuntime_Dynamic": "/MD",
+      "CPPRuntime_Static_Debug": "/MTd",
+      "CPPRuntime_Static": "/MT",
+
+      "WarningLevel0": "/W0",
+      "WarningLevel1": "/W1",
+      "WarningLevel2": "/W2",
+      "WarningLevel3": "/W3",
+      "WarningLevel4": "/W4",
+
+      "UNICODE": "/D _UNICODE /D UNICODE",
+      "D_WITH_EDITOR": "/D WITH_EDITOR",
+      "D_SHIPPING": "/D SHIPPING_BUILD",
+      "NO_CL_LINK": "/c"
+    },
+    "Link": {
+      "CreateSymbolDB": "/DEBUG /PDB:"
     }
   }
 }
