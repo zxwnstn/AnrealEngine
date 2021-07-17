@@ -174,7 +174,16 @@ workspace "Anreal"
 		    "Engine/Source/Runtime/",
             "Engine/Source/Runtime/*/public"
 	    }
-
+        
+        filter "configurations:DebugEditor"
+            targetdir ("Engine/Binaries/{2}/DebugEditor")
+            targetname ("AnrealEditor")
+        filter "configurations:DevelopEditor"
+            targetdir ("Engine/Binaries/{3}/DevelopEditor")
+            targetname ("AnrealEditor")
+        filter "configurations:ShippingEditor"
+            targetdir ("Engine/Binaries/{4}/ShippingEditor")
+            targetname ("AnrealEditor")
     group ""
 
     group "Program"
@@ -208,8 +217,14 @@ def GetPremakeScript(target) :
     if target == "vs2017" :
         Script = Script.replace("{0}", VS2017CommandLines[0])
         Script = Script.replace("{1}", VS2017CommandLines[0])
+        Script = Script.replace("{2}", "vs2017")
+        Script = Script.replace("{3}", "vs2017")
+        Script = Script.replace("{4}", "vs2017")
     if target == "vs2019" :
         Script = Script.replace("{0}", VS2019CommandLines[0])
         Script = Script.replace("{1}", VS2019CommandLines[0])
+        Script = Script.replace("{2}", "vs2019")
+        Script = Script.replace("{3}", "vs2019")
+        Script = Script.replace("{4}", "vs2019")
 
     return Script

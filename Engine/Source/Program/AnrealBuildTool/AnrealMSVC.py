@@ -136,7 +136,7 @@ class MSCVBuilder(AnrealBuilder.BasicBuilder) :
         Sources = []
         Anreal.GatherFilesFromRecursiveIterate(Sources, description.ModulePath, "cpp")
     
-        ObjsPath = Anreal.ObjPath + "/" + args["Config"] + "/" + args["Compiler"]
+        ObjsPath = Anreal.ObjPath + "/" + args["Compiler"] + "/" + args["Config"] 
         Anreal.TryCreatePath(ObjsPath)
         os.chdir(ObjsPath)
         CLCommandLine = CreateClCmdLine(args, nativeBuildOptions["CL"], description, Sources)
@@ -145,7 +145,7 @@ class MSCVBuilder(AnrealBuilder.BasicBuilder) :
         Objs = []
         Anreal.GatherOnlyFileNameFromSourceList(Sources, Objs)
 
-        BinPath = Anreal.BinPath + "/" + args["Config"] + "/" + args["Compiler"]
+        BinPath = Anreal.BinPath + "/" + args["Compiler"] + "/" + args["Config"]
         Anreal.TryCreatePath(BinPath)
         os.chdir(BinPath)
         LinkCommandLine = CreateLinkCmdLine(args, nativeBuildOptions["Link"], description, Objs, ObjsPath, BinPath)
