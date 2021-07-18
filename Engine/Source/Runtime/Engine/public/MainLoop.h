@@ -4,14 +4,14 @@
 
 class MainLoop
 {
-private:
+public:
 	MainLoop();
-	void InitImpl();
 
 public:
 	void Init();
 	void Tick(float deltaTime);
 
+private:
+	bool IsInitiated;
 };
 
-ENGINE_API int GetSome();

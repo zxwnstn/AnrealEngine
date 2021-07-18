@@ -81,6 +81,10 @@ def CreateClCmdLine(args, clOptions, description, sources) :
     ClCmdLine += " /I \"" + description.ModulePath + "\"" 
     ClCmdLine += " /I \"" + description.ModulePath + "/public\"" 
 
+    #Attach dependency Include Path
+    for Dependency in description.DependencyList :
+        ClCmdLine += " /I \"" + description.ProgramPath + "/" + Dependency + "/public\"" 
+
     #Attach cpp files that will be compile
     for Cpp in sources :
         ClCmdLine += ' ' + Cpp

@@ -4,22 +4,21 @@
 
 #include "Core/public/Type.h"
 
-extern MainLoop* LoopInst;
+extern MainLoop LoopInst;
 
 int Run()
 {
-	while (false)
+	while (true)
 	{
 		float DeltaTime = 1.0f;//Ticker::GetTickTime();
-		LoopInst->Tick(DeltaTime);
+		LoopInst.Tick(DeltaTime);
 	}
-	std::cout << "Hello world And" << GetTypeID();
 	return 0;
 }
 
 int EngineMain(int argc, char* argv[])
 {
-	LoopInst->Init();
+	LoopInst.Init();
 	int ExitCode = Run();
 
 	return ExitCode;
